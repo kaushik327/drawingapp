@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebasetutorial/widgets/big_button.dart';
 import 'package:flutter/material.dart';
 import 'package:firebasetutorial/pages/forgot_pw_page.dart';
 
@@ -157,29 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
 
                 // sign in button
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: GestureDetector(
-                    onTap: signIn,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                BigButton(text: 'Sign In', onTap: signIn),
                 const SizedBox(height: 25),
 
                 // not a member? register now

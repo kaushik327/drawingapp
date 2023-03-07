@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebasetutorial/widgets/big_button.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -17,7 +18,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
   final _nameController = TextEditingController();
-  final _ageController = TextEditingController();
 
 
   @override
@@ -26,7 +26,6 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _confirmpasswordController.dispose();
     _nameController.dispose();
-    _ageController.dispose();
     super.dispose();
   }
 
@@ -43,7 +42,6 @@ class _RegisterPageState extends State<RegisterPage> {
         await FirebaseFirestore.instance.collection('users').add({
           'name': _nameController.text.trim(),
           'email': _emailController.text.trim(),
-          'age': int.parse(_ageController.text.trim()),
         });
       }
     } on FirebaseAuthException catch (e) {
@@ -64,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool detailsValid() {
-    return int.tryParse(_ageController.text.trim()) != null;
+    return true;
   }
   @override
   Widget build(BuildContext context) {
@@ -111,29 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: const BorderSide(color: Colors.deepPurple),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      hintText: 'Name',
-                      fillColor: Colors.grey[200],
-                      filled: true,
-                    ),
-                  )
-                ),
-                const SizedBox(height: 10),
-
-                // age textfield
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _ageController,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.deepPurple),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      hintText: 'Age',
+                      hintText: 'Username',
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),
@@ -209,30 +185,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 10),
           
-                // sign in button
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: GestureDetector(
-                    onTap: signUp,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                // sign up button
+                BigButton(text: 'Sign Up', onTap: signUp),
                 const SizedBox(height: 25),
           
                 // not a member? register now

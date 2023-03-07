@@ -1,4 +1,3 @@
-import 'package:firebasetutorial/pages/login_page.dart';
 import 'package:firebasetutorial/pages/home_page.dart';
 import 'package:firebasetutorial/auth/auth_page.dart';
 import 'package:flutter/material.dart';
