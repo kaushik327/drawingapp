@@ -1,5 +1,6 @@
-import 'package:firebasetutorial/login_page.dart';
-import 'package:firebasetutorial/home_page.dart';
+import 'package:firebasetutorial/pages/login_page.dart';
+import 'package:firebasetutorial/pages/home_page.dart';
+import 'package:firebasetutorial/auth/auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -16,7 +17,7 @@ class MainPage extends StatelessWidget {
           if (snapshot.hasData) {
             return const HomePage();
           } else {
-            return const LoginPage();
+            return const AuthPage();
           }
         },
       ),
