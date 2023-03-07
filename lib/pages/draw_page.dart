@@ -30,7 +30,6 @@ class _DrawPageState extends State<DrawPage> {
           ),
         ),
       ),
-      
     );
   }
 }

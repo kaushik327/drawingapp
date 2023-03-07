@@ -1,16 +1,5 @@
-# firebasetutorial
+# Drawing App
 
-A new Flutter project.
+(IN PROGRESS) App where you can draw your own profile picture and look at other people's drawings. 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+(I'm making this to learn Flutter and Firebase. I followed [this](https://www.youtube.com/watch?v=aJdIkRipgSk&list=PLlvRDpXh1Se4wZWOWs8yapI8AS_fwDHzf) tutorial for some of the UI and basic Firebase functionality.)
