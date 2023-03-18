@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebasetutorial/read_data/get_user_name.dart';
+import 'package:firebasetutorial/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:firebasetutorial/pages/draw_page.dart';
 
@@ -15,19 +15,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser;
 
-  // document IDs
-  List<String> docIDs = [];
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> docs = [];
 
-  // get docIDs
-  Future getDocId() async {
-    docIDs.clear();
-    await FirebaseFirestore.instance.collection('users').get().then(
-      (snapshot) {
-        for (var document in snapshot.docs) {
-          docIDs.add(document.reference.id);
-        }
-      }
-    );
+  Future getDocs() async {
+    docs.clear();
+    var snapshot = await FirebaseFirestore.instance.collection('users').get();
+    docs = snapshot.docs;
   }
 
   @override
@@ -59,25 +52,13 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 8),
             Expanded(
               child: FutureBuilder(
-                future: getDocId(),
+                future: getDocs(),
                 builder: (context, snapshot) {
                   return ListView.builder(
-                    itemCount: docIDs.length,
+                    itemCount: docs.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.grey[300],
-                          ),
-                          child: ListTile(
-                            leading: const Icon(Icons.person),
-                            title: GetUserName(documentId: docIDs[index],),
-                          ),
-                        ),
-                      );
-                    },
+                      return UserCard(doc: docs[index]);
+                    }
                   );
                 },
               ),
@@ -94,7 +75,16 @@ class _HomePageState extends State<HomePage> {
                 return const DrawPage();
               }
             )
-          );
+          ).then((_) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return const AlertDialog(
+                  content: Text("Image saved! It may take a few seconds to appear on your home page.")
+                );
+              }
+            );
+          });
         },
         child: const Icon(Icons.draw),
       )
