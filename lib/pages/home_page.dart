@@ -18,9 +18,13 @@ class _HomePageState extends State<HomePage> {
   List<QueryDocumentSnapshot<Map<String, dynamic>>> docs = [];
 
   Future getDocs() async {
-    docs.clear();
-    var snapshot = await FirebaseFirestore.instance.collection('users').get();
-    docs = snapshot.docs;
+    try {
+      docs.clear();
+      var snapshot = await FirebaseFirestore.instance.collection('users').get();
+      docs = snapshot.docs;
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -75,16 +79,7 @@ class _HomePageState extends State<HomePage> {
                 return const DrawPage();
               }
             )
-          ).then((_) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return const AlertDialog(
-                  content: Text("Image saved! It may take a few seconds to appear on your home page.")
-                );
-              }
-            );
-          });
+          );
         },
         child: const Icon(Icons.draw),
       )

@@ -14,8 +14,12 @@ class _UserCardState extends State<UserCard> {
 
   String imageUrl = "";
   Future getImageUrl() async {
-    if (widget.doc.data().containsKey('image')) {
-      imageUrl = await FirebaseStorage.instance.ref('images/${widget.doc.data()['image']}.png').getDownloadURL();
+    try {
+      if (widget.doc.data().containsKey('image')) {
+        imageUrl = await FirebaseStorage.instance.ref('images/${widget.doc.get('image')}.png').getDownloadURL();
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -30,7 +34,7 @@ class _UserCardState extends State<UserCard> {
           child: Column(
             children: [
               Text(
-                widget.doc.data()['name'],
+                widget.doc.get('name'),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebasetutorial/widgets/big_button.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -23,14 +24,22 @@ class _DrawPageState extends State<DrawPage> {
 
   List<PointWrapper?> points = [];
 
+  Color currentColor = Colors.black;
+
   void _onPanStart(DragStartDetails details) {
     setState(() {
-      points.add(PointWrapper(point: details.localPosition));
+      points.add(PointWrapper(
+        point: details.localPosition,
+        color: currentColor,
+      ));
     });
   }
   void _onPanUpdate(DragUpdateDetails details) {
     setState(() {
-      points.add(PointWrapper(point: details.localPosition));
+      points.add(PointWrapper(
+        point: details.localPosition,
+        color: currentColor,
+      ));
     });
   }
   void _onPanEnd(DragEndDetails details) {
@@ -43,7 +52,6 @@ class _DrawPageState extends State<DrawPage> {
     ui.PictureRecorder recorder = ui.PictureRecorder();
     Canvas canvas = Canvas(recorder);
     var painter = Painter(points: points);
-    // Creating a new canvas but with our old painter
     painter.paint(canvas, canvasSize);
     ui.Image renderedImage = await recorder
       .endRecording()
@@ -72,10 +80,21 @@ class _DrawPageState extends State<DrawPage> {
       String uniqueID = DateTime.now().millisecondsSinceEpoch.toString();
       FirebaseStorage.instance.ref('images/$uniqueID.png').putFile(localFile);
       doc.reference.update({'image': uniqueID});
-
     } catch (error) {
       print(error.toString());
     }
+
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Text("Image saved! It may take a few seconds to appear on your home page.")
+          );
+        }
+      );
+    }
+
   }
 
   @override
@@ -114,7 +133,40 @@ class _DrawPageState extends State<DrawPage> {
                   ),
                 ),
               ),
-
+              const SizedBox(height: 25),
+              MaterialButton(
+                child: const Text('Change Color'),
+                onPressed: () {
+                  Color pickerColor = currentColor;
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Pick a color!'),
+                        content: SingleChildScrollView(
+                          child: ColorPicker(
+                            pickerColor: pickerColor,
+                            onColorChanged: (color) {
+                              pickerColor = color;
+                            },
+                          ),
+                        ),
+                        actions: [
+                          ElevatedButton(
+                            child: const Text('Done'),
+                            onPressed: () {
+                              setState(() {
+                                currentColor = pickerColor;
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                  );
+                }
+              ),
               const SizedBox(height: 25),
               BigButton(text: 'Save and Quit', onTap: () {
                 saveAndQuit();
@@ -136,12 +188,16 @@ class Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.black
       ..strokeWidth = 3.0
       ..strokeCap = StrokeCap.butt;
     for (int i = 0; i < points.length - 1; i++) {
       if (pointIsGood(points[i]) && pointIsGood(points[i+1])) {
-        canvas.drawLine(points[i]!.point, points[i+1]!.point, paint);
+        paint.color = points[i]!.color;
+        canvas.drawLine(
+          points[i]!.point,
+          points[i+1]!.point,
+          paint
+        );
       }
     }
   }
@@ -162,5 +218,6 @@ class Painter extends CustomPainter {
 
 class PointWrapper {
   Offset point;
-  PointWrapper({required this.point});
+  Color color;
+  PointWrapper({required this.point, required this.color});
 }
