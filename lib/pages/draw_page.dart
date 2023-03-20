@@ -135,7 +135,13 @@ class _DrawPageState extends State<DrawPage> {
               ),
               const SizedBox(height: 25),
               MaterialButton(
-                child: const Text('Change Color'),
+                color: Colors.grey[300],
+                child: const Text(
+                  'Change Color',
+                  style: TextStyle(
+                    color: Colors.deepPurple,
+                  ),
+                ),
                 onPressed: () {
                   Color pickerColor = currentColor;
                   showDialog(

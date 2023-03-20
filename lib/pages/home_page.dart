@@ -49,26 +49,31 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 8),
-            Expanded(
-              child: FutureBuilder(
-                future: getDocs(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                    itemCount: docs.length,
-                    itemBuilder: (context, index) {
-                      return UserCard(doc: docs[index]);
-                    }
-                  );
-                },
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {});
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 8),
+              Expanded(
+                child: FutureBuilder(
+                  future: getDocs(),
+                  builder: (context, snapshot) {
+                    return ListView.builder(
+                      itemCount: docs.length,
+                      itemBuilder: (context, index) {
+                        return UserCard(doc: docs[index]);
+                      }
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
-        )
+            ],
+          )
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
